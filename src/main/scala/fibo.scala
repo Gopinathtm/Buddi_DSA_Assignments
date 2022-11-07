@@ -4,12 +4,14 @@ object fibo extends App {
   def fibonacci(n: Int): Int = {
     n match {
       case n if n == 1 || n == 0 => n
-      case _ => fibonacci(n - 1) + fibonacci(n - 2)
+      case _ =>
+        add += 1
+        fibonacci(n - 1) + fibonacci(n - 2)
 
     }
   }
 
-  println(fibonacci(8),add)
+  println(fibonacci(5),add)
 
 
 }
