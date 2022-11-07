@@ -20,7 +20,7 @@ object Exponential {
 
   def exponential_methodOne(x: Double): Double = {
     var ans: Double = 1
-    (1 to 30).foreach { i =>
+    (1 to 20).foreach { i =>
       ans += power(x, i) / factorial(i)
     }
     ans
@@ -38,7 +38,7 @@ object Exponential {
 
   def exponential_methodThree(x: Double): Double = {
     var prev: Double = 1.0
-    (700 to 1 by -1).foreach { i =>
+    (200 to 1 by -1).foreach { i =>
       prev = 1 + (x / i) * prev
     }
     prev
@@ -46,7 +46,7 @@ object Exponential {
 
   def timeTaken(method: Double => Double, n: Double, methodType: String): Long = {
     val start = System.currentTimeMillis()
-    println(s"$methodType started  for n = $n")
+//    println(s"$methodType started  for n = $n")
     (0 to 1000000).foreach(_ => method(n))
     val end = System.currentTimeMillis()
     println(s"$methodType ended for n = $n is ${end - start}ms and value = ${method(n)}")
@@ -56,7 +56,7 @@ object Exponential {
   def main(args: Array[String]): Unit = {
     val inputList: List[Double] = List(5.0, 11.0, 17.0, 23.0, 29.0)
     val methodList = List("Library method", "O(n) first method", "O(n) second method", "Naive method")
-    val methods: List[Double => Double] = List(math.exp, exponential_methodThree, exponential_methodTwo, exponential_methodOne)
+    val methods: List[Double => Double] = List(math.exp, exponential_methodTwo,exponential_methodThree, exponential_methodOne)
     val result: ArrayBuffer[Long] = ArrayBuffer()
 
     val method_wise_tuple = methods zip methodList
