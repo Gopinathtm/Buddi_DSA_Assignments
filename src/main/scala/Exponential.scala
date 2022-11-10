@@ -1,4 +1,5 @@
 import scala.collection.mutable.ArrayBuffer
+import scala.util.control.Breaks._
 
 object Exponential {
 
@@ -44,6 +45,26 @@ object Exponential {
     prev
   }
 
+  def exponential_methodFour(n:Double, x: Double): Double = {
+    var exponentialOfWholeNumber: Double = 0.0
+    var nTimes = 1
+    var wholeNumber = x.toInt
+    breakable {
+      for (i <- 1 to x.toInt) {
+        if (wholeNumber == 1) {
+          exponentialOfWholeNumber = 1 + (1 + 1 / 2 * (1 + 1 / 3 * (1 + 1 / 4 * (1 + 1 / 5))))
+          nTimes = i
+          break
+        }
+        else
+          wholeNumber = wholeNumber / 2
+      }
+    }
+    val dble = x - wholeNumber
+    exponentialOfWholeNumber += 1 + (dble + dble / 2 * (1 + dble / 3 * (1 + dble / 4 * (1 + dble / 5))))
+    exponentialOfWholeNumber
+  }
+
   def timeTakenOwnMethods(method: (Double,Double) => Double, n: Double, x:Double,  methodType: String): Long = {
     val start = System.currentTimeMillis()
 //    println(s"$methodType started  for n = $n")
@@ -64,8 +85,8 @@ object Exponential {
 
   def main(args: Array[String]): Unit = {
     val inputList: List[Double] = List(1.0, 5.0, 11.0, 17.0, 23.0, 29.0)
-    val methodList = List("O(n) first method", "O(n) second method", "Naive method")
-    val methods: List[(Double,Double) => Double] = List(exponential_methodTwo,exponential_methodThree, exponential_methodOne)
+    val methodList = List("O(n) first method", "O(n) second method", "Naive method", "log(n) method")
+    val methods: List[(Double,Double) => Double] = List(exponential_methodTwo,exponential_methodThree, exponential_methodOne, exponential_methodFour)
     val result: ArrayBuffer[Long] = ArrayBuffer()
 
     val method_wise_tuple = methods zip methodList

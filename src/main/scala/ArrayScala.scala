@@ -1,4 +1,4 @@
-﻿import java.util
+import java.util
 import scala.util.Random
 import scala.collection.mutable.ArrayBuffer
 
@@ -43,7 +43,7 @@ object ArrayScala {
   }
 
   def main(args: Array[String]): Unit = {
-    val nList = List(100,1000,10000, 100000, 1000000, 10000000, 100000000)
+    val nList = List(10, 100,1000,10000, 100000, 1000000, 10000000, 100000000)
     val averageTimeTaken:ArrayBuffer[Double] = new ArrayBuffer[Double]()
     nList.foreach{n => averageTimeTaken.append(averageTime(n))}
     println(averageTimeTaken)
