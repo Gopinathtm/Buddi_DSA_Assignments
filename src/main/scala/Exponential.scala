@@ -3,8 +3,8 @@ import scala.util.control.Breaks._
 
 object Exponential {
 
-  def power(base: Int, pow: Int): Long = {
-    var ans: Long = 1
+  def power(base: Double, pow: Int): Double = {
+    var ans: Double = 1
     (1 to pow).foreach { _ =>
       ans *= base
     }
@@ -19,15 +19,15 @@ object Exponential {
     ans
   }
 
-  def exponential_methodOne(n: Double, x:Double): Double = {
+  def exponential_methodOne(n: Double, x: Double): Double = {
     var ans: Double = 1
     (1 to n.toInt).foreach { i =>
-      ans += power(x.toInt, i) / factorial(i)
+      ans += power(x, i) / factorial(i)
     }
     ans
   }
 
-  def exponential_methodTwo(n: Double, x:Double): Double = {
+  def exponential_methodTwo(n: Double, x: Double): Double = {
     var ans: Double = 1
     var prev: Double = 1
     (1 to n.toInt).foreach { i =>
@@ -37,7 +37,7 @@ object Exponential {
     ans
   }
 
-  def exponential_methodThree(n: Double, x:Double): Double = {
+  def exponential_methodThree(n: Double, x: Double): Double = {
     var prev: Double = 1.0
     (n.toInt to 1 by -1).foreach { i =>
       prev = 1 + (x / i) * prev
@@ -45,36 +45,62 @@ object Exponential {
     prev
   }
 
-  def exponential_methodFour(n:Double, x: Double): Double = {
-    var exponentialOfWholeNumber: Double = 0.0
-    var nTimes = 1
-    var wholeNumber = x.toInt
-    breakable {
-      for (i <- 1 to x.toInt) {
-        if (wholeNumber == 1) {
-          exponentialOfWholeNumber = 1 + (1 + 1 / 2 * (1 + 1 / 3 * (1 + 1 / 4 * (1 + 1 / 5))))
-          nTimes = i
-          break
+  def exponentialWholeNumber(n: Int): Double = {
+    val binaryString = n.toBinaryString
+    val exponentialMap = scala.collection.mutable.Map(0 -> 1.0, 1 -> math.E)
+    var exponentOfWholeNumber = 1.0
+    var ePower = 1
+    n match {
+      case 0 => exponentialMap(0)
+      case 1 => exponentialMap(1)
+      case _ => {
+        (binaryString.length - 1 to 0 by -1).foreach { i =>
+          if (binaryString(i) == '0') {
+            ePower *= 2
+            exponentialMap(ePower) = exponentialMap(ePower / 2) * exponentialMap(ePower / 2)
+          }
+          else if (binaryString(i) == '1') {
+            ePower *= 2
+            exponentialMap(ePower) = exponentialMap(ePower / 2) * exponentialMap(ePower / 2)
+            exponentOfWholeNumber *= exponentialMap(ePower / 2)
+          }
         }
-        else
-          wholeNumber = wholeNumber / 2
+        exponentOfWholeNumber
       }
     }
-    val dble = x - wholeNumber
-    exponentialOfWholeNumber += 1 + (dble + dble / 2 * (1 + dble / 3 * (1 + dble / 4 * (1 + dble / 5))))
-    exponentialOfWholeNumber
   }
 
-  def timeTakenOwnMethods(method: (Double,Double) => Double, n: Double, x:Double,  methodType: String): Long = {
+  def exponentialDecimal(n: Double): Double = {
+    1 + n * (1 + n / 2 * (1 + n / 3 * (1 + n / 4 * (1 + n / 5))))
+  }
+
+  def exponentialMethodFour(n: Double, x:Double): Double = {
+    val wholeNumber = x.toInt
+    val decimalNumber = x - wholeNumber
+    val result = exponentialWholeNumber(wholeNumber) * exponentialDecimal(decimalNumber)
+    result
+  }
+
+  def timeTakenMethodFour(n: Double, x: Double, methodType: String): Long = {
     val start = System.currentTimeMillis()
-//    println(s"$methodType started  for n = $n")
-    (0 to 1000000).foreach(_ => method(n,x))
+    val wholeNumber = x.toInt
+    val decimalNumber = x - wholeNumber
+    val result = exponentialWholeNumber(wholeNumber) * exponentialDecimal(decimalNumber)
     val end = System.currentTimeMillis()
-    println(s"$methodType ended for n = $n is ${end - start}ms and value = ${method(n,x)}")
+    println(s"$methodType ended for n = $n is ${end - start}ms and value = ${result}")
     end - start
   }
 
-  def timeTakenLibraryMethod(n: Double, x:Double, methodType: String = "Math.Exp "): Long = {
+  def timeTakenOwnMethods(method: (Double, Double) => Double, n: Double, x: Double, methodType: String): Long = {
+    val start = System.currentTimeMillis()
+    //    println(s"$methodType started  for n = $n")
+    (0 to 1000000).foreach(_ => method(n, x))
+    val end = System.currentTimeMillis()
+    println(s"$methodType ended for n = $n is ${end - start}ms and value = ${method(n, x)}")
+    end - start
+  }
+
+  def timeTakenLibraryMethod(n: Double, x: Double, methodType: String = "Math.Exp "): Long = {
     val start = System.currentTimeMillis()
     //    println(s"$methodType started  for n = $n")
     (0 to 1000000).foreach(_ => math.exp(x))
@@ -84,20 +110,21 @@ object Exponential {
   }
 
   def main(args: Array[String]): Unit = {
-    val inputList: List[Double] = List(1.0, 5.0, 11.0, 17.0, 23.0, 29.0)
-    val methodList = List("O(n) first method", "O(n) second method", "Naive method", "log(n) method")
-    val methods: List[(Double,Double) => Double] = List(exponential_methodTwo,exponential_methodThree, exponential_methodOne, exponential_methodFour)
+
+    val inputList: List[Double] = List(5.0, 11.0, 17.0, 23.0, 29.0)
+    val methodList = List("O(n) first method", "O(n) second method", "Naive method", "nlog(n) method")
+    val methods: List[(Double, Double) => Double] = List(exponential_methodTwo, exponential_methodThree, exponential_methodOne, exponentialMethodFour)
     val result: ArrayBuffer[Long] = ArrayBuffer()
 
     val method_wise_tuple = methods zip methodList
-    val x = 2
-    inputList.foreach{n =>
-      method_wise_tuple.foreach{ methodTuple =>
-        result.append(timeTakenOwnMethods(methodTuple._1, n,x, methodTuple._2))}
+    val x = 5.3
+    inputList.foreach { n =>
+      method_wise_tuple.foreach { methodTuple =>
+        result.append(timeTakenOwnMethods(methodTuple._1, n, x, methodTuple._2))
+      }
     }
-    inputList.foreach{n => result.append(timeTakenLibraryMethod(n,x))}
-
+    inputList.foreach { n => result.append(timeTakenLibraryMethod(n, x, "math.exp")) }
     println(result)
-    }
+  }
 
 }
