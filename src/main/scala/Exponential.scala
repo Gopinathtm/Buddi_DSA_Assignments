@@ -1,8 +1,9 @@
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.util.control.Breaks._
 
 object Exponential {
-
+  val exponentialMap: mutable.Map[Int, Double] = scala.collection.mutable.Map(0 -> 1.0, 1 -> math.E)
   def power(base: Double, pow: Int): Double = {
     var ans: Double = 1
     (1 to pow).foreach { _ =>
@@ -47,7 +48,6 @@ object Exponential {
 
   def exponentialWholeNumber(n: Int): Double = {
     val binaryString = n.toBinaryString
-    val exponentialMap = scala.collection.mutable.Map(0 -> 1.0, 1 -> math.E)
     var exponentOfWholeNumber = 1.0
     var ePower = 1
     n match {
@@ -81,22 +81,13 @@ object Exponential {
     result
   }
 
-  def timeTakenMethodFour(n: Double, x: Double, methodType: String): Long = {
-    val start = System.currentTimeMillis()
-    val wholeNumber = x.toInt
-    val decimalNumber = x - wholeNumber
-    val result = exponentialWholeNumber(wholeNumber) * exponentialDecimal(decimalNumber)
-    val end = System.currentTimeMillis()
-    println(s"$methodType ended for n = $n is ${end - start}ms and value = ${result}")
-    end - start
-  }
 
   def timeTakenOwnMethods(method: (Double, Double) => Double, n: Double, x: Double, methodType: String): Long = {
     val start = System.currentTimeMillis()
     //    println(s"$methodType started  for n = $n")
     (0 to 1000000).foreach(_ => method(n, x))
     val end = System.currentTimeMillis()
-    println(s"$methodType ended for n = $n is ${end - start}ms and value = ${method(n, x)}")
+//    println(s"$methodType ended for n = $n is ${end - start}ms and value = ${method(n, x)}")
     end - start
   }
 
@@ -105,7 +96,7 @@ object Exponential {
     //    println(s"$methodType started  for n = $n")
     (0 to 1000000).foreach(_ => math.exp(x))
     val end = System.currentTimeMillis()
-    println(s"$methodType ended for n = $n is ${end - start}ms and value = ${math.exp(x)}")
+//    println(s"$methodType ended for n = $n is ${end - start}ms and value = ${math.exp(x)}")
     end - start
   }
 
@@ -124,7 +115,7 @@ object Exponential {
       }
     }
     inputList.foreach { n => result.append(timeTakenLibraryMethod(n, x, "math.exp")) }
-    println(result)
+    println(result.foreach(i => println(i)))
   }
 
 }

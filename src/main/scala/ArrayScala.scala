@@ -19,7 +19,7 @@ object ArrayScala {
       val diff = (System.nanoTime - start) / 1000
       // if the difference is >10us, let's observe it.
       // the time taken is for rebuilding the array to ensure continuity.
-      if (diff > 10) print(s"@ ${list.size} --> $diff uS\n")
+      if (diff > 10) print(s" ${list.size} \t $diff \n")
     }
   }
 
@@ -44,9 +44,9 @@ object ArrayScala {
 
   def main(args: Array[String]): Unit = {
     val nList = List(10, 100,1000,10000, 100000, 1000000, 10000000, 100000000)
-//    val averageTimeTaken:ArrayBuffer[Double] = new ArrayBuffer[Double]()
-//    nList.foreach{n => averageTimeTaken.append(averageTime(n))}
-//    println(averageTimeTaken)
-    test(1000)
+    val averageTimeTaken:ArrayBuffer[Double] = new ArrayBuffer[Double]()
+    nList.foreach{n => averageTimeTaken.append(averageTime(n))}
+    println(averageTimeTaken)
+//    test(100000)
   }
 }
