@@ -1,6 +1,7 @@
+package Week1Assignment
 import java.util
-import scala.util.Random
 import scala.collection.mutable.ArrayBuffer
+import scala.util.Random
 
 object ArrayScala {
   def test(n: Int): Unit = {

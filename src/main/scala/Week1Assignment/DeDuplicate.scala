@@ -1,3 +1,5 @@
+package Week1Assignment
+
 import java.util
 import scala.util.Random
 

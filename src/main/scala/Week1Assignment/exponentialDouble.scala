@@ -1,4 +1,4 @@
-import scala.util.control.Breaks._
+package Week1Assignment
 
 object exponentialDouble {
   def exponentialWholeNumber(n: Int): Double = {
@@ -8,7 +8,7 @@ object exponentialDouble {
     var ePower = 1
     n match {
       case 0 => exponentialMap(0)
-      case _ => {
+      case _ =>
         (binaryString.length - 1 to 0 by -1).foreach { i =>
           if (binaryString(i) == '0') {
             ePower *= 2
@@ -21,7 +21,7 @@ object exponentialDouble {
           }
         }
         exponentOfWholeNumber
-      }
+
     }
   }
 

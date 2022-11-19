@@ -1,3 +1,5 @@
+package Week1Assignment
+
 object fibo extends App {
   var add = 0
 

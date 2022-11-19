@@ -1,6 +1,7 @@
+package Week1Assignment
+
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
-import scala.util.control.Breaks._
 
 object Exponential {
   val exponentialMap: mutable.Map[Int, Double] = scala.collection.mutable.Map(0 -> 1.0, 1 -> math.E)
@@ -53,7 +54,7 @@ object Exponential {
     n match {
       case 0 => exponentialMap(0)
       case 1 => exponentialMap(1)
-      case _ => {
+      case _ =>
         (binaryString.length - 1 to 0 by -1).foreach { i =>
           if (binaryString(i) == '0') {
             ePower *= 2
@@ -66,7 +67,6 @@ object Exponential {
           }
         }
         exponentOfWholeNumber
-      }
     }
   }
 
