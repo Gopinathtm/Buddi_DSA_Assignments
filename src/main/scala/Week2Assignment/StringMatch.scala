@@ -4,6 +4,7 @@ import java.io.{File, FileNotFoundException, IOException, PrintWriter}
 import scala.io.Source
 import scala.util.Random
 import scala.collection.mutable.ListBuffer
+import com.github.tototoshi.csv._
 
 object StringMatch {
   var fileString :String = ""
@@ -52,9 +53,38 @@ object StringMatch {
 
   }
 
+  def timeTaken(keywordsPath:String, nonExistPath:String, completeString:String): (ListBuffer[Long], ListBuffer[Long]) ={
+    val keywordSource = Source.fromFile(keywordsPath)
+    val keywordsList = keywordSource.getLines().toList
+    keywordSource.close()
+    val nonExistSource = Source.fromFile(nonExistPath)
+    val nonExistWords = nonExistSource.getLines().toList
+    nonExistSource.close()
+    val AllWords = keywordsList ++ nonExistWords
+    val containsTimeTaken = new ListBuffer[Long] ()
+    val matchTimeTaken = new ListBuffer[Long] ()
+    AllWords.foreach{ eachWord =>
+      var start = System.nanoTime()
+      var result = completeString.contains(eachWord)
+      var end = System.nanoTime()
+      containsTimeTaken.append(end-start)
+      start = System.nanoTime()
+      result = completeString.matches(eachWord)
+      end = System.nanoTime()
+      matchTimeTaken.append(end-start)
+    }
+    (containsTimeTaken, matchTimeTaken)
+  }
+
   def main(args: Array[String]): Unit = {
     readTextFile("bible.txt")
-    getRandomWordsFromText(fileString)
+    (0 to 30).foreach { i =>
+      val (containsTime, matchTime) = timeTaken("keywords.txt", "NonExcistantWord.txt", fileString)
+      val writer = CSVWriter.open("out.csv", append = true)
+      writer.writeAll(List(containsTime, matchTime))
+      writer.close()
+      println( i + " file written")
+    }
   }
 
 }
