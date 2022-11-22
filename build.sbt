@@ -4,5 +4,6 @@ ThisBuild / scalaVersion := "2.12.17"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "DSA_Assignments"
+    name := "DSA_Assignments",
+    libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.3.10"
   )
